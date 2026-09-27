@@ -1,0 +1,12 @@
+{
+  "display_name": "☣️ Zombie Dashboard",
+  "loading_order": 10,
+  "requires": [],
+  "optional": [],
+  "js": "index.js",
+  "css": "style.css",
+  "author": "siltax03",
+  "version": "1.0.0",
+  "auto_update": false,
+  "description": "좀비 아포칼립스 테마 대시보드 - 타이머, 알림, 생존 패널 포함"
+}

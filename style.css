@@ -1,0 +1,487 @@
+/* ☣️ Zombie Dashboard — SillyTavern Extension Style */
+/* 좀비 아포칼립스 테마: 녹슨 금속 + 바이오해저드 그린 */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;700&display=swap');
+
+:root {
+  --z-bg:        #0d0d0d;
+  --z-bg2:       #141a10;
+  --z-bg3:       #1a2015;
+  --z-border:    #2e4a1e;
+  --z-green:     #4cff4c;
+  --z-green-dim: #1e7a1e;
+  --z-red:       #ff3b3b;
+  --z-amber:     #ffa500;
+  --z-text:      #b8d4b0;
+  --z-muted:     #557055;
+  --z-font-mono: 'Share Tech Mono', monospace;
+  --z-font-head: 'Oswald', sans-serif;
+}
+
+/* ── 패널 컨테이너 ───────────────────────────────────────── */
+.zombie-panel {
+  background: var(--z-bg);
+  border: 1px solid var(--z-border);
+  border-left: 3px solid var(--z-green-dim);
+  border-radius: 4px;
+  margin: 8px 0;
+  font-family: var(--z-font-mono);
+  color: var(--z-text);
+  box-shadow: 0 0 12px rgba(76, 255, 76, 0.08), inset 0 0 30px rgba(0,0,0,0.4);
+  transition: box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.zombie-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--z-green-dim), transparent);
+  pointer-events: none;
+}
+
+/* 경보 플래시 */
+.zombie-panel.alert-flash {
+  animation: z-flash 0.3s ease 3;
+}
+@keyframes z-flash {
+  0%, 100% { box-shadow: 0 0 12px rgba(76,255,76,0.08); }
+  50%       { box-shadow: 0 0 30px rgba(255,59,59,0.6); border-color: var(--z-red); }
+}
+
+/* 접힘 상태 */
+.zombie-panel.collapsed .zombie-body { display: none; }
+
+/* ── 작은 창(플로팅 패널) ──────────────────────────────────── */
+.zombie-panel.zombie-floating {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 9999;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 0 12px rgba(76,255,76,0.08);
+}
+@media (max-width: 480px) {
+  .zombie-panel.zombie-floating { width: 88vw; right: 6vw; top: 50px; }
+}
+
+/* ── 헤더 (드래그 핸들) ─────────────────────────────────────── */
+.zombie-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--z-bg2);
+  border-bottom: 1px solid var(--z-border);
+  cursor: move;
+  user-select: none;
+  transition: background 0.2s;
+}
+.zombie-header:hover { background: var(--z-bg3); }
+
+.zombie-chevron,
+.zombie-close {
+  cursor: pointer;
+  padding: 2px 4px;
+}
+.zombie-close {
+  color: var(--z-muted);
+  font-size: 13px;
+  margin-left: 2px;
+}
+.zombie-close:hover { color: var(--z-red); }
+
+.zombie-skull {
+  font-size: 16px;
+  color: var(--z-green);
+  animation: z-pulse 2s infinite;
+}
+@keyframes z-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.zombie-title {
+  flex: 1;
+  font-family: var(--z-font-head);
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--z-green);
+  text-shadow: 0 0 8px rgba(76,255,76,0.5);
+}
+
+.zombie-chevron {
+  color: var(--z-muted);
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+.zombie-panel.collapsed .zombie-chevron { transform: rotate(180deg); }
+
+/* ── 패널 본문 ──────────────────────────────────────────── */
+.zombie-body {
+  padding: 10px;
+}
+
+/* ── 탭 ─────────────────────────────────────────────────── */
+.zombie-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+.z-tab {
+  flex: 1;
+  padding: 5px 4px;
+  font-family: var(--z-font-mono);
+  font-size: 11px;
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  color: var(--z-muted);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.z-tab:hover { color: var(--z-text); background: var(--z-bg3); }
+.z-tab.active {
+  background: var(--z-bg3);
+  color: var(--z-green);
+  border-color: var(--z-green-dim);
+  text-shadow: 0 0 6px rgba(76,255,76,0.4);
+}
+
+/* ── 탭 콘텐츠 ──────────────────────────────────────────── */
+.z-tabcontent { display: none; }
+.z-tabcontent.active { display: block; }
+
+/* ── 통계 행 ────────────────────────────────────────────── */
+.zombie-stat-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.zombie-stat {
+  flex: 1;
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  border-radius: 3px;
+  padding: 6px 4px;
+  text-align: center;
+}
+.zstat-label {
+  font-size: 9px;
+  color: var(--z-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.zstat-value {
+  font-family: var(--z-font-head);
+  font-size: 20px;
+  color: var(--z-green);
+  line-height: 1;
+}
+.zstat-value.infection { color: var(--z-amber); }
+
+/* ── 게이지 ─────────────────────────────────────────────── */
+.z-gauge-wrap { margin-bottom: 10px; }
+.z-gauge-label {
+  font-size: 10px;
+  color: var(--z-muted);
+  margin-bottom: 4px;
+}
+.z-gauge-bg {
+  height: 8px;
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.z-gauge-fill {
+  height: 100%;
+  background: var(--z-green-dim);
+  transition: width 0.4s, background 0.4s;
+  box-shadow: 0 0 6px rgba(76,255,76,0.3);
+}
+.z-gauge-fill.high     { background: var(--z-amber); }
+.z-gauge-fill.critical { background: var(--z-red); animation: z-pulse 0.5s infinite; }
+
+/* ── 로그 ───────────────────────────────────────────────── */
+.z-alert-log {
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  border-radius: 3px;
+  padding: 6px;
+  margin-bottom: 10px;
+}
+.z-log-header {
+  font-size: 10px;
+  color: var(--z-muted);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--z-border);
+}
+.z-log-list {
+  max-height: 100px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.z-log-list::-webkit-scrollbar { width: 3px; }
+.z-log-list::-webkit-scrollbar-track { background: var(--z-bg); }
+.z-log-list::-webkit-scrollbar-thumb { background: var(--z-green-dim); }
+
+.z-log-entry {
+  font-size: 10px;
+  color: var(--z-muted);
+  padding: 1px 0;
+}
+.z-log-entry.init  { color: var(--z-green-dim); font-style: italic; }
+.z-log-entry.alert { color: var(--z-red); }
+.z-log-entry.info  { color: var(--z-text); }
+.z-log-time { color: var(--z-muted); margin-right: 4px; }
+
+/* ── 액션 버튼 행 ───────────────────────────────────────── */
+.z-action-row,
+.z-control-row,
+.z-preset-row,
+.z-custom-row,
+.z-mission-input-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+/* ── 버튼 공통 ──────────────────────────────────────────── */
+.z-btn {
+  flex: 1;
+  padding: 6px 8px;
+  font-family: var(--z-font-mono);
+  font-size: 11px;
+  border-radius: 2px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.z-btn.danger {
+  background: rgba(255,59,59,0.1);
+  border-color: #7a1e1e;
+  color: var(--z-red);
+}
+.z-btn.danger:hover {
+  background: rgba(255,59,59,0.25);
+  box-shadow: 0 0 8px rgba(255,59,59,0.3);
+}
+.z-btn.safe {
+  background: rgba(76,255,76,0.08);
+  border-color: var(--z-green-dim);
+  color: var(--z-green);
+}
+.z-btn.safe:hover {
+  background: rgba(76,255,76,0.2);
+  box-shadow: 0 0 8px rgba(76,255,76,0.25);
+}
+.z-btn.neutral {
+  background: var(--z-bg2);
+  border-color: var(--z-border);
+  color: var(--z-text);
+}
+.z-btn.neutral:hover { background: var(--z-bg3); }
+
+/* ── 입력 ───────────────────────────────────────────────── */
+.z-input {
+  flex: 1;
+  padding: 5px 8px;
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  border-radius: 2px;
+  color: var(--z-text);
+  font-family: var(--z-font-mono);
+  font-size: 11px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.z-input:focus { border-color: var(--z-green-dim); }
+.z-input::placeholder { color: var(--z-muted); }
+
+/* ── 타이머 ─────────────────────────────────────────────── */
+.z-timer-display {
+  font-family: var(--z-font-head);
+  font-size: 52px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--z-green);
+  text-shadow: 0 0 20px rgba(76,255,76,0.4);
+  letter-spacing: 4px;
+  padding: 10px 0 4px;
+  transition: color 0.3s, text-shadow 0.3s;
+  line-height: 1;
+}
+.z-timer-display.warning {
+  color: var(--z-amber);
+  text-shadow: 0 0 20px rgba(255,165,0,0.5);
+}
+.z-timer-display.danger {
+  color: var(--z-red);
+  text-shadow: 0 0 20px rgba(255,59,59,0.6);
+  animation: z-pulse 0.5s infinite;
+}
+
+.z-timer-label {
+  text-align: center;
+  font-size: 11px;
+  color: var(--z-muted);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.z-timer-note {
+  font-size: 10px;
+  color: var(--z-muted);
+  text-align: center;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* 프리셋 버튼 */
+.z-preset {
+  flex: 1;
+  padding: 4px;
+  font-family: var(--z-font-mono);
+  font-size: 10px;
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  color: var(--z-muted);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.z-preset:hover { color: var(--z-green); border-color: var(--z-green-dim); }
+
+/* ── 작전 패널 ──────────────────────────────────────────── */
+.z-mission-header {
+  font-family: var(--z-font-head);
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--z-green);
+  text-align: center;
+  padding: 6px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--z-border);
+}
+
+.z-mode-row {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+.z-mode-btn {
+  flex: 1;
+  padding: 5px 4px;
+  font-family: var(--z-font-mono);
+  font-size: 10px;
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  color: var(--z-muted);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.z-mode-btn:hover { color: var(--z-text); }
+.z-mode-btn.active {
+  color: var(--z-green);
+  border-color: var(--z-green-dim);
+  background: var(--z-bg3);
+}
+
+/* ── 자원 그리드 ─────────────────────────────────────────── */
+.z-survival-grid { display: flex; flex-direction: column; gap: 6px; }
+.z-resource { display: flex; align-items: center; gap: 6px; }
+.z-res-icon  { width: 20px; text-align: center; font-size: 14px; }
+.z-res-name  { width: 40px; font-size: 10px; color: var(--z-muted); }
+.z-res-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.z-res-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s;
+}
+.z-res-fill.food  { background: #8fbc5a; }
+.z-res-fill.water { background: #4ab8c4; }
+.z-res-fill.ammo  { background: #c4a43a; }
+.z-res-fill.meds  { background: #c45a5a; }
+
+/* ── 경보 설정 ──────────────────────────────────────────── */
+.z-alert-config { display: flex; flex-direction: column; gap: 6px; }
+.z-label {
+  font-size: 10px;
+  color: var(--z-muted);
+  letter-spacing: 1px;
+}
+.z-toggle-row { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.z-toggle-row input[type="checkbox"] { accent-color: var(--z-green); }
+.z-toggle-row span { font-size: 11px; color: var(--z-text); }
+
+.z-history-list { max-height: 80px; overflow-y: auto; }
+.z-history-item {
+  font-size: 10px;
+  color: var(--z-red);
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255,59,59,0.1);
+}
+
+/* ── 임무 목록 ──────────────────────────────────────────── */
+.z-mission-list {
+  max-height: 160px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 4px;
+}
+.z-mission-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 6px;
+  background: var(--z-bg2);
+  border: 1px solid var(--z-border);
+  border-radius: 2px;
+  transition: opacity 0.2s;
+}
+.z-mission-item.done { opacity: 0.45; }
+.z-mission-item.done .z-mission-text { text-decoration: line-through; color: var(--z-muted); }
+.z-mission-check { accent-color: var(--z-green); cursor: pointer; flex-shrink: 0; }
+.z-mission-text  { flex: 1; font-size: 11px; color: var(--z-text); word-break: break-all; }
+.z-mission-del {
+  background: none;
+  border: none;
+  color: var(--z-muted);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 0 2px;
+  line-height: 1;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+.z-mission-del:hover { color: var(--z-red); }
+
+/* ── 스크롤바 공통 ──────────────────────────────────────── */
+.z-mission-list::-webkit-scrollbar,
+.z-history-list::-webkit-scrollbar { width: 3px; }
+.z-mission-list::-webkit-scrollbar-track,
+.z-history-list::-webkit-scrollbar-track { background: var(--z-bg); }
+.z-mission-list::-webkit-scrollbar-thumb,
+.z-history-list::-webkit-scrollbar-thumb { background: var(--z-green-dim); }
